@@ -135,8 +135,9 @@ public class SetupMainMenuScene
     private static SettingsPopup SetupSettingsPopup(GameObject canvasGo)
     {
         var popupGo = FindOrCreateChild(canvasGo, "SettingsPopup");
-        var settingsPopup = EnsureComponent<SettingsPopup>(popupGo);
+        EnsureRectTransform(popupGo);
         StretchFull(popupGo);
+        var settingsPopup = EnsureComponent<SettingsPopup>(popupGo);
 
         var dimBgGo = FindOrCreateChild(popupGo, "DimBg");
         var dimBgImage = EnsureComponent<Image>(dimBgGo);
@@ -251,10 +252,17 @@ public class SetupMainMenuScene
         return comp;
     }
 
+    private static void EnsureRectTransform(GameObject go)
+    {
+        if (go.GetComponent<RectTransform>() == null)
+            go.AddComponent<RectTransform>();
+    }
+
     private static void StretchFull(GameObject go)
     {
         var rect = go.GetComponent<RectTransform>();
-        if (rect == null) return;
+        if (rect == null)
+            rect = go.AddComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
         rect.offsetMin = Vector2.zero;
