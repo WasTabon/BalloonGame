@@ -6,6 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/BalloonGame/Scenes/Bootstrap.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/BalloonGame/Scenes/MainMenu.unity
+    guid: c839c842e94e5084eb9f6eb06483b70d
+  - enabled: 1
+    path: Assets/BalloonGame/Scenes/Game.unity
+    guid: 5a4dfba82fb393b43b3c87381582c314
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 3b7dfd26fee1d9d4f8103b0d80683921, type: 2}
