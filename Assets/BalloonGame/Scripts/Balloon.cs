@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float wobbleAmplitude = 0.15f;
     [SerializeField] private float wobbleFrequency = 1.5f;
 
@@ -22,8 +21,9 @@ public class Balloon : MonoBehaviour
     {
         if (isDead) return;
 
+        float speed = DifficultyManager.Instance != null ? DifficultyManager.Instance.BalloonSpeed : 3f;
         float wobbleX = startX + Mathf.Sin(Time.time * wobbleFrequency) * wobbleAmplitude;
-        float newY = rb.position.y + moveSpeed * Time.fixedDeltaTime;
+        float newY = rb.position.y + speed * Time.fixedDeltaTime;
         rb.MovePosition(new Vector2(wobbleX, newY));
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -29,6 +30,7 @@ public class SetupMainMenuScene
         SetupMainMenuCanvas();
 
         Debug.Log("[Iteration 2] MainMenu scene setup complete!");
+        EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
     private static void SetupGameManager()

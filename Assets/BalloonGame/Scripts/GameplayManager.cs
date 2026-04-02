@@ -51,6 +51,9 @@ public class GameplayManager : MonoBehaviour
         {
             CurrentScore = newScore;
             OnScoreChanged?.Invoke(CurrentScore);
+
+            if (DifficultyManager.Instance != null)
+                DifficultyManager.Instance.UpdateDifficulty(CurrentScore);
         }
     }
 

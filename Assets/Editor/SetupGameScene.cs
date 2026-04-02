@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -13,6 +14,12 @@ public class SetupGameScene
 
     [MenuItem("BalloonGame/(Iteration 4) Setup Game Scene — Obstacles + GameOver")]
     public static void SetupIteration4()
+    {
+        Setup();
+    }
+
+    [MenuItem("BalloonGame/(Iteration 5) Setup Game Scene — Patterns + Difficulty")]
+    public static void SetupIteration5()
     {
         Setup();
     }
@@ -37,9 +44,11 @@ public class SetupGameScene
         var shield = SetupShield(shieldSprite);
         SetupCameraTarget(cam, balloon.transform);
         var spawner = SetupObstacleSpawner(squareSprite, rectSprite, obstacleCircleSprite);
+        SetupDifficultyManager();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 4] Game scene setup complete! Obstacles + GameOver added.");
+        Debug.Log("[Iteration 5] Game scene setup complete! Patterns + Difficulty added.");
+        EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
     private static Camera SetupCamera()
@@ -122,6 +131,12 @@ public class SetupGameScene
         so.FindProperty("circleSprite").objectReferenceValue = circle;
         so.ApplyModifiedProperties();
         return spawner;
+    }
+
+    private static void SetupDifficultyManager()
+    {
+        var go = FindOrCreate("DifficultyManager");
+        EnsureComponent<DifficultyManager>(go);
     }
 
     private static void SetupGameCanvas(Balloon balloon, Shield shield)

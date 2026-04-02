@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class Shield : MonoBehaviour
 {
     [SerializeField] private float followSpeed = 15f;
+    [SerializeField] private float maxMovePerFrame = 0.8f;
 
     private Rigidbody2D rb;
     private Camera mainCam;
@@ -12,6 +13,7 @@ public class Shield : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         mainCam = Camera.main;
         targetPosition = rb.position;
     }
@@ -29,8 +31,11 @@ public class Shield : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 newPos = Vector2.Lerp(rb.position, targetPosition, followSpeed * Time.fixedDeltaTime);
-        rb.MovePosition(newPos);
+        Vector2 desired = Vector2.Lerp(rb.position, targetPosition, followSpeed * Time.fixedDeltaTime);
+        Vector2 delta = desired - rb.position;
+        if (delta.magnitude > maxMovePerFrame)
+            desired = rb.position + delta.normalized * maxMovePerFrame;
+        rb.MovePosition(desired);
     }
 
     private bool IsPointerOverUI()

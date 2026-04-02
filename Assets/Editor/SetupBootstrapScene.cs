@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
@@ -30,6 +31,7 @@ public class SetupBootstrapScene
         SetupBootstrapUI();
 
         Debug.Log("[Iteration 1] Bootstrap scene setup complete! Don't forget to create MainMenu and Game scenes and add all 3 scenes to Build Settings.");
+        EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
     private static void SetupAddressableLoader()
