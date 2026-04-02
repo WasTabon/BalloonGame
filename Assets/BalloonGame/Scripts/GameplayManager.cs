@@ -6,6 +6,7 @@ public class GameplayManager : MonoBehaviour
 
     [SerializeField] private Balloon balloon;
     [SerializeField] private Shield shield;
+    [SerializeField] private GameOverPopup gameOverPopup;
 
     private float startY;
     private bool isGameOver;
@@ -27,6 +28,7 @@ public class GameplayManager : MonoBehaviour
     {
         Debug.Assert(balloon != null, "GameplayManager: balloon is null!");
         Debug.Assert(shield != null, "GameplayManager: shield is null!");
+        Debug.Assert(gameOverPopup != null, "GameplayManager: gameOverPopup is null!");
 
         startY = balloon.transform.position.y;
 
@@ -56,8 +58,10 @@ public class GameplayManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
-        GameManager.Instance.TrySetBestScore(CurrentScore);
+
+        bool isNewBest = GameManager.Instance.TrySetBestScore(CurrentScore);
         OnGameOver?.Invoke();
+        gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
     }
 
     public void SetPaused(bool paused)

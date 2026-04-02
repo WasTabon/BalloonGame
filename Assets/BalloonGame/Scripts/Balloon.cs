@@ -30,6 +30,7 @@ public class Balloon : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead) return;
+        if (other.GetComponent<Obstacle>() == null) return;
         isDead = true;
         OnBalloonHit?.Invoke();
     }
