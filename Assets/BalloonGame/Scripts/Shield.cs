@@ -9,6 +9,7 @@ public class Shield : MonoBehaviour
     private Rigidbody2D rb;
     private Camera mainCam;
     private Vector2 targetPosition;
+    private ShieldVisuals visuals;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public class Shield : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         mainCam = Camera.main;
         targetPosition = rb.position;
+        visuals = GetComponent<ShieldVisuals>();
     }
 
     private void Update()
@@ -36,6 +38,25 @@ public class Shield : MonoBehaviour
         if (delta.magnitude > maxMovePerFrame)
             desired = rb.position + delta.normalized * maxMovePerFrame;
         rb.MovePosition(desired);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<Obstacle>() == null) return;
+
+        Vector2 contactPoint = collision.GetContact(0).point;
+        Color obsColor = Color.white;
+        var obsSR = collision.gameObject.GetComponent<SpriteRenderer>();
+        if (obsSR != null) obsColor = obsSR.color;
+
+        if (ParticleManager.Instance != null)
+            ParticleManager.Instance.PlayShieldHit(contactPoint, obsColor);
+
+        if (ScreenShake.Instance != null)
+            ScreenShake.Instance.ShakeLight();
+
+        if (visuals != null)
+            visuals.PlayHitEffect();
     }
 
     private bool IsPointerOverUI()

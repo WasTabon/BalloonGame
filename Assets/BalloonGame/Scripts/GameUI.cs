@@ -10,10 +10,12 @@ public class GameUI : MonoBehaviour
     [SerializeField] private PausePopup pausePopup;
 
     private int displayedScore;
+    private int lastMilestone;
 
     private void Start()
     {
         scoreText.text = "0";
+        lastMilestone = 0;
         pauseButton.onClick.AddListener(OnPauseClicked);
 
         GameplayManager.Instance.OnScoreChanged -= UpdateScore;
@@ -39,7 +41,32 @@ public class GameUI : MonoBehaviour
         displayedScore = score;
         scoreText.text = score.ToString();
 
-        scoreText.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f, 6, 0.5f);
+        int currentMilestone = (score / 10) * 10;
+        if (currentMilestone > lastMilestone && currentMilestone > 0)
+        {
+            lastMilestone = currentMilestone;
+            scoreText.transform.DOKill(true);
+            scoreText.transform.DOPunchScale(Vector3.one * 0.35f, 0.4f, 8, 0.5f);
+
+            Color origColor = scoreText.color;
+            scoreText.DOColor(new Color(1f, 0.9f, 0.3f), 0.1f).OnComplete(() =>
+            {
+                scoreText.DOColor(origColor, 0.3f);
+            });
+
+            if (ScreenShake.Instance != null)
+                ScreenShake.Instance.ShakeMedium();
+
+            if (ParticleManager.Instance != null)
+            {
+                Vector3 worldPos = Camera.main.transform.position + new Vector3(0, Camera.main.orthographicSize * 0.8f, 10f);
+                ParticleManager.Instance.PlayScoreMilestone(worldPos);
+            }
+        }
+        else
+        {
+            scoreText.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f, 6, 0.5f);
+        }
     }
 
     private void OnPauseClicked()

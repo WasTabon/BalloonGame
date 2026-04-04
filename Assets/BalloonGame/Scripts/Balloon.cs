@@ -32,6 +32,16 @@ public class Balloon : MonoBehaviour
         if (isDead) return;
         if (other.GetComponent<Obstacle>() == null) return;
         isDead = true;
+
+        if (ParticleManager.Instance != null)
+            ParticleManager.Instance.PlayBalloonPop(transform.position, new Color(1f, 0.45f, 0.5f));
+
+        if (ScreenShake.Instance != null)
+            ScreenShake.Instance.ShakeHeavy();
+
+        var sr = GetComponent<SpriteRenderer>();
+        if (sr != null) sr.enabled = false;
+
         OnBalloonHit?.Invoke();
     }
 

@@ -24,6 +24,12 @@ public class SetupGameScene
         Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 6) Setup Game Scene — VFX + Game Feel")]
+    public static void SetupIteration6()
+    {
+        Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -45,9 +51,10 @@ public class SetupGameScene
         SetupCameraTarget(cam, balloon.transform);
         var spawner = SetupObstacleSpawner(squareSprite, rectSprite, obstacleCircleSprite);
         SetupDifficultyManager();
+        SetupParticleManager();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 5] Game scene setup complete! Patterns + Difficulty added.");
+        Debug.Log("[Iteration 6] Game scene setup complete! VFX + Game Feel added.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -64,6 +71,7 @@ public class SetupGameScene
         cam.orthographic = true;
         cam.orthographicSize = 10f;
         EnsureComponent<GameCamera>(cam.gameObject);
+        EnsureComponent<ScreenShake>(cam.gameObject);
         return cam;
     }
 
@@ -118,6 +126,7 @@ public class SetupGameScene
         col.radius = 0.5f;
 
         var shield = EnsureComponent<Shield>(go);
+        EnsureComponent<ShieldVisuals>(go);
         return shield;
     }
 
@@ -137,6 +146,12 @@ public class SetupGameScene
     {
         var go = FindOrCreate("DifficultyManager");
         EnsureComponent<DifficultyManager>(go);
+    }
+
+    private static void SetupParticleManager()
+    {
+        var go = FindOrCreate("ParticleManager");
+        EnsureComponent<ParticleManager>(go);
     }
 
     private static void SetupGameCanvas(Balloon balloon, Shield shield)
