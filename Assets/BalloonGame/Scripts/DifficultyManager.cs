@@ -32,17 +32,18 @@ public class DifficultyManager : MonoBehaviour
 
     public void UpdateDifficulty(int score)
     {
-        float t = Mathf.Clamp01(score / 100f);
+        float rawT = Mathf.Clamp01(score / 150f);
+        float t = rawT * rawT;
 
         BalloonSpeed = Mathf.Lerp(baseBalloonSpeed, maxBalloonSpeed, t);
-        SpawnInterval = Mathf.Lerp(baseSpawnInterval, minSpawnInterval, t);
+        SpawnInterval = Mathf.Lerp(baseSpawnInterval, minSpawnInterval, rawT);
         ObstacleSpeed = Mathf.Lerp(baseObstacleSpeed, maxObstacleSpeed, t);
         ObstacleMass = Mathf.Lerp(baseObstacleMass, maxObstacleMass, t);
 
-        CanSpawnLine = score >= 10;
-        CanSpawnRain = score >= 20;
+        CanSpawnLine = score >= 8;
+        CanSpawnRain = score >= 18;
         CanSpawnSide = score >= 30;
         CanSpawnNarrow = score >= 50;
-        CanSpawnTrap = score >= 70;
+        CanSpawnTrap = score >= 75;
     }
 }

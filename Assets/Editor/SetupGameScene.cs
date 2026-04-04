@@ -36,6 +36,12 @@ public class SetupGameScene
         SetupBootstrapScene.Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 8) Setup Game Scene — Background + TapToStart")]
+    public static void SetupIteration8()
+    {
+        Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -58,9 +64,10 @@ public class SetupGameScene
         var spawner = SetupObstacleSpawner(squareSprite, rectSprite, obstacleCircleSprite);
         SetupDifficultyManager();
         SetupParticleManager();
+        SetupBackground();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 6] Game scene setup complete! VFX + Game Feel added.");
+        Debug.Log("[Iteration 8] Game scene setup complete! Background + TapToStart added.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -160,6 +167,15 @@ public class SetupGameScene
         EnsureComponent<ParticleManager>(go);
     }
 
+    private static void SetupBackground()
+    {
+        var bgGo = FindOrCreate("ScrollingBackground");
+        EnsureComponent<ScrollingBackground>(bgGo);
+
+        var gridGo = FindOrCreate("BackgroundGrid");
+        EnsureComponent<BackgroundGrid>(gridGo);
+    }
+
     private static void SetupGameCanvas(Balloon balloon, Shield shield)
     {
         var canvasGo = FindOrCreate("GameCanvas");
@@ -212,6 +228,25 @@ public class SetupGameScene
 
         var pausePopup = SetupPausePopup(canvasGo);
         var gameOverPopup = SetupGameOverPopup(canvasGo);
+
+        var tapTextGo = FindOrCreateChild(canvasGo, "TapToStartText");
+        var tapTMP = EnsureComponent<TextMeshProUGUI>(tapTextGo);
+        tapTMP.text = "TAP TO START";
+        tapTMP.fontSize = 48;
+        tapTMP.alignment = TextAlignmentOptions.Center;
+        tapTMP.color = new Color(1f, 1f, 1f, 0.7f);
+        tapTMP.fontStyle = FontStyles.Bold;
+        var tapRect = tapTextGo.GetComponent<RectTransform>();
+        tapRect.anchorMin = new Vector2(0.1f, 0.35f);
+        tapRect.anchorMax = new Vector2(0.9f, 0.45f);
+        tapRect.offsetMin = Vector2.zero;
+        tapRect.offsetMax = Vector2.zero;
+
+        var tapToStartGo = FindOrCreate("TapToStart");
+        var tapToStart = EnsureComponent<TapToStart>(tapToStartGo);
+        var tapSO = new SerializedObject(tapToStart);
+        tapSO.FindProperty("tapText").objectReferenceValue = tapTMP;
+        tapSO.ApplyModifiedProperties();
 
         var uiSO = new SerializedObject(gameUI);
         uiSO.FindProperty("scoreText").objectReferenceValue = scoreTMP;

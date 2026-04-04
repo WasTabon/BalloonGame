@@ -20,6 +20,7 @@ public class ObstacleSpawner : MonoBehaviour
     private void Update()
     {
         if (GameplayManager.Instance.IsGameOver || GameplayManager.Instance.IsPaused) return;
+        if (TapToStart.Instance != null && !TapToStart.Instance.HasStarted) return;
 
         timer += Time.deltaTime;
         float interval = DifficultyManager.Instance != null ? DifficultyManager.Instance.SpawnInterval : 1.2f;

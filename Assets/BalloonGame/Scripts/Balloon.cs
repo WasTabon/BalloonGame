@@ -20,6 +20,7 @@ public class Balloon : MonoBehaviour
     private void FixedUpdate()
     {
         if (isDead) return;
+        if (TapToStart.Instance != null && !TapToStart.Instance.HasStarted) return;
 
         float speed = DifficultyManager.Instance != null ? DifficultyManager.Instance.BalloonSpeed : 3f;
         float wobbleX = startX + Mathf.Sin(Time.time * wobbleFrequency) * wobbleAmplitude;
