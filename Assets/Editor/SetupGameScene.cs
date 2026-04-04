@@ -30,6 +30,12 @@ public class SetupGameScene
         Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 7) Setup Bootstrap — Audio + Haptics")]
+    public static void SetupIteration7Bootstrap()
+    {
+        SetupBootstrapScene.Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)

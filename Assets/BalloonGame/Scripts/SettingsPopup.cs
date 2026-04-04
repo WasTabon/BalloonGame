@@ -48,6 +48,9 @@ public class SettingsPopup : MonoBehaviour
 
     public void Hide()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         dimBg.DOFade(0f, 0.2f).SetEase(Ease.InQuad);
         panel.DOScale(0f, 0.25f).SetEase(Ease.InBack).OnComplete(() =>
         {
@@ -58,6 +61,12 @@ public class SettingsPopup : MonoBehaviour
     private void OnSoundToggle()
     {
         GameManager.Instance.ToggleSound();
+
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.UpdateVolume();
 
         soundToggleButton.transform.DOPunchScale(Vector3.one * 0.15f, 0.3f, 8, 0.5f);
     }

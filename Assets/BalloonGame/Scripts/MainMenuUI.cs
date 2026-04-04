@@ -76,6 +76,9 @@ public class MainMenuUI : MonoBehaviour
         playPulseTween?.Kill();
         playButton.interactable = false;
 
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         playButton.transform.DOScale(0.9f, 0.1f).SetEase(Ease.InQuad).OnComplete(() =>
         {
             playButton.transform.DOScale(1.1f, 0.15f).SetEase(Ease.OutQuad).OnComplete(() =>
@@ -87,6 +90,9 @@ public class MainMenuUI : MonoBehaviour
 
     private void OnSettingsClicked()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         settingsPopup.Show();
     }
 }

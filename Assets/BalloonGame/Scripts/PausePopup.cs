@@ -28,6 +28,9 @@ public class PausePopup : MonoBehaviour
     {
         gameObject.SetActive(true);
 
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SetPaused(true);
+
         dimBg.alpha = 0f;
         dimBg.DOFade(1f, 0.25f).SetEase(Ease.OutQuad).SetUpdate(true);
 
@@ -47,15 +50,26 @@ public class PausePopup : MonoBehaviour
 
     private void OnResumeClicked()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         Hide(() =>
         {
             GameplayManager.Instance.SetPaused(false);
+            if (MusicManager.Instance != null)
+                MusicManager.Instance.SetPaused(false);
         });
     }
 
     private void OnMenuClicked()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         Time.timeScale = 1f;
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SetPaused(false);
+
         SceneLoader.Instance.LoadScene("MainMenu");
     }
 }

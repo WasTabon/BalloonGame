@@ -42,6 +42,15 @@ public class Balloon : MonoBehaviour
         var sr = GetComponent<SpriteRenderer>();
         if (sr != null) sr.enabled = false;
 
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlayBalloonPop();
+            SFXManager.Instance.PlayGameOver();
+        }
+
+        if (HapticManager.Instance != null)
+            HapticManager.Instance.Heavy();
+
         OnBalloonHit?.Invoke();
     }
 

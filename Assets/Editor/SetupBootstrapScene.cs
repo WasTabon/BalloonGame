@@ -28,10 +28,31 @@ public class SetupBootstrapScene
 
         SetupAddressableLoader();
         SetupSceneLoader();
+        SetupMusicManager();
+        SetupSFXManager();
+        SetupHapticManager();
         SetupBootstrapUI();
 
         Debug.Log("[Iteration 1] Bootstrap scene setup complete! Don't forget to create MainMenu and Game scenes and add all 3 scenes to Build Settings.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+    }
+
+    private static void SetupMusicManager()
+    {
+        var go = FindOrCreate("MusicManager");
+        EnsureComponent<MusicManager>(go);
+    }
+
+    private static void SetupSFXManager()
+    {
+        var go = FindOrCreate("SFXManager");
+        EnsureComponent<SFXManager>(go);
+    }
+
+    private static void SetupHapticManager()
+    {
+        var go = FindOrCreate("HapticManager");
+        EnsureComponent<HapticManager>(go);
     }
 
     private static void SetupAddressableLoader()

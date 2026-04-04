@@ -64,6 +64,10 @@ public class BootstrapUI : MonoBehaviour
     private void OnComplete()
     {
         Debug.Assert(SceneLoader.Instance != null, "SceneLoader.Instance is null! Make sure SceneLoader is on the scene.");
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.LoadAndPlay();
+
         SceneLoader.Instance.LoadScene("MainMenu");
     }
 

@@ -62,10 +62,19 @@ public class GameUI : MonoBehaviour
                 Vector3 worldPos = Camera.main.transform.position + new Vector3(0, Camera.main.orthographicSize * 0.8f, 10f);
                 ParticleManager.Instance.PlayScoreMilestone(worldPos);
             }
+
+            if (SFXManager.Instance != null)
+                SFXManager.Instance.PlayMilestone();
+
+            if (HapticManager.Instance != null)
+                HapticManager.Instance.Medium();
         }
         else
         {
             scoreText.transform.DOPunchScale(Vector3.one * 0.15f, 0.2f, 6, 0.5f);
+
+            if (SFXManager.Instance != null)
+                SFXManager.Instance.PlayScoreTick();
         }
     }
 

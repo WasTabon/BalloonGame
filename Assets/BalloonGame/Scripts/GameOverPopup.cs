@@ -55,11 +55,17 @@ public class GameOverPopup : MonoBehaviour
 
     private void OnRestartClicked()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         SceneLoader.Instance.LoadScene("Game");
     }
 
     private void OnMenuClicked()
     {
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayButtonClick();
+
         SceneLoader.Instance.LoadScene("MainMenu");
     }
 }

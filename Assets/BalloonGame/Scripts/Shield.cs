@@ -57,6 +57,12 @@ public class Shield : MonoBehaviour
 
         if (visuals != null)
             visuals.PlayHitEffect();
+
+        if (SFXManager.Instance != null)
+            SFXManager.Instance.PlayShieldHit();
+
+        if (HapticManager.Instance != null)
+            HapticManager.Instance.Light();
     }
 
     private bool IsPointerOverUI()
