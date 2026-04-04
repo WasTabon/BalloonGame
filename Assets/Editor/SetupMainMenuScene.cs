@@ -37,7 +37,20 @@ public class SetupMainMenuScene
     private static void SetupMenuBackground()
     {
         var bgGo = FindOrCreate("MenuBackground");
-        var bg = EnsureComponent<ScrollingBackground>(bgGo);
+        EnsureComponent<ScrollingBackground>(bgGo);
+
+        var decorGo = FindOrCreate("DecorBalloon");
+        var decorSR = EnsureComponent<SpriteRenderer>(decorGo);
+        decorSR.color = new Color(1f, 0.45f, 0.5f, 0.15f);
+        decorSR.sortingOrder = -5;
+
+        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/BalloonGame/Sprites/BalloonCircle.png");
+        if (sprite != null)
+            decorSR.sprite = sprite;
+
+        decorGo.transform.position = new Vector3(0, -1f, 0);
+        decorGo.transform.localScale = new Vector3(4f, 4f, 1f);
+        EnsureComponent<DecorBalloon>(decorGo);
     }
 
     private static void SetupGameManager()

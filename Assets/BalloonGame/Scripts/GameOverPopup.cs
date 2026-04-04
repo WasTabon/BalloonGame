@@ -31,7 +31,7 @@ public class GameOverPopup : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        scoreValueText.text = score.ToString();
+        scoreValueText.text = "0";
         bestValueText.text = bestScore.ToString();
         newBestText.gameObject.SetActive(isNewBest);
 
@@ -39,18 +39,21 @@ public class GameOverPopup : MonoBehaviour
         dimBg.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
 
         panel.localScale = Vector3.zero;
-        panel.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetDelay(0.1f);
+        panel.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetDelay(0.1f).OnComplete(() =>
+        {
+            ScoreCounter.AnimateScore(scoreValueText, score, 0.8f);
+        });
 
         if (isNewBest)
         {
             newBestText.transform.localScale = Vector3.zero;
-            newBestText.transform.DOScale(1f, 0.5f).SetEase(Ease.OutElastic).SetDelay(0.5f);
+            newBestText.transform.DOScale(1f, 0.5f).SetEase(Ease.OutElastic).SetDelay(1.0f);
         }
 
         restartButton.transform.localScale = Vector3.zero;
-        restartButton.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack).SetDelay(0.4f);
+        restartButton.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack).SetDelay(1.0f);
         menuButton.transform.localScale = Vector3.zero;
-        menuButton.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack).SetDelay(0.5f);
+        menuButton.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack).SetDelay(1.1f);
     }
 
     private void OnRestartClicked()

@@ -235,6 +235,7 @@ public class ObstacleSpawner : MonoBehaviour
         sr.color = GetRandomColor();
 
         obs.AddComponent<Obstacle>();
+        obs.AddComponent<ObstacleHitFlash>();
         activeObstacles.Add(obs);
         return obs;
     }

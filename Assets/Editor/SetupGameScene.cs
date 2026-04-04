@@ -48,6 +48,12 @@ public class SetupGameScene
         Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 10) Setup Game Scene — Final Polish")]
+    public static void SetupIteration10()
+    {
+        Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -75,7 +81,7 @@ public class SetupGameScene
         SetupDeathSequence();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 9] Game scene setup complete! Bounds + DeathFX + Polish added.");
+        Debug.Log("[Iteration 10] Game scene setup complete! Final Polish.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -125,6 +131,7 @@ public class SetupGameScene
 
         var balloon = EnsureComponent<Balloon>(go);
         EnsureComponent<BalloonTrail>(go);
+        EnsureComponent<BalloonBounce>(go);
         return balloon;
     }
 

@@ -18,6 +18,9 @@ public class GameUI : MonoBehaviour
         lastMilestone = 0;
         pauseButton.onClick.AddListener(OnPauseClicked);
 
+        scoreText.outlineWidth = 0.2f;
+        scoreText.outlineColor = new Color32(0, 0, 0, 128);
+
         GameplayManager.Instance.OnScoreChanged -= UpdateScore;
         GameplayManager.Instance.OnScoreChanged += UpdateScore;
 
