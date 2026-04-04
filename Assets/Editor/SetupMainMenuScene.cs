@@ -27,10 +27,17 @@ public class SetupMainMenuScene
         cam.orthographic = true;
 
         SetupGameManager();
+        SetupMenuBackground();
         SetupMainMenuCanvas();
 
-        Debug.Log("[Iteration 2] MainMenu scene setup complete!");
+        Debug.Log("[Iteration 9] MainMenu scene setup complete!");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+    }
+
+    private static void SetupMenuBackground()
+    {
+        var bgGo = FindOrCreate("MenuBackground");
+        var bg = EnsureComponent<ScrollingBackground>(bgGo);
     }
 
     private static void SetupGameManager()

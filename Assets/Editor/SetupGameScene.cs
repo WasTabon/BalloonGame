@@ -42,6 +42,12 @@ public class SetupGameScene
         Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 9) Setup Game Scene — Bounds + DeathFX + Polish")]
+    public static void SetupIteration9()
+    {
+        Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -65,9 +71,11 @@ public class SetupGameScene
         SetupDifficultyManager();
         SetupParticleManager();
         SetupBackground();
+        SetupWorldBounds();
+        SetupDeathSequence();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 8] Game scene setup complete! Background + TapToStart added.");
+        Debug.Log("[Iteration 9] Game scene setup complete! Bounds + DeathFX + Polish added.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -116,6 +124,7 @@ public class SetupGameScene
         col.radius = 0.5f;
 
         var balloon = EnsureComponent<Balloon>(go);
+        EnsureComponent<BalloonTrail>(go);
         return balloon;
     }
 
@@ -174,6 +183,18 @@ public class SetupGameScene
 
         var gridGo = FindOrCreate("BackgroundGrid");
         EnsureComponent<BackgroundGrid>(gridGo);
+    }
+
+    private static void SetupWorldBounds()
+    {
+        var go = FindOrCreate("WorldBounds");
+        EnsureComponent<WorldBounds>(go);
+    }
+
+    private static void SetupDeathSequence()
+    {
+        var go = FindOrCreate("DeathSequence");
+        EnsureComponent<DeathSequence>(go);
     }
 
     private static void SetupGameCanvas(Balloon balloon, Shield shield)

@@ -64,7 +64,18 @@ public class GameplayManager : MonoBehaviour
 
         bool isNewBest = GameManager.Instance.TrySetBestScore(CurrentScore);
         OnGameOver?.Invoke();
-        gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
+
+        if (DeathSequence.Instance != null)
+        {
+            DeathSequence.Instance.Play(() =>
+            {
+                gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
+            });
+        }
+        else
+        {
+            gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
+        }
     }
 
     public void SetPaused(bool paused)
