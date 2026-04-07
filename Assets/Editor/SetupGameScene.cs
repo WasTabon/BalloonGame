@@ -66,6 +66,12 @@ public class SetupGameScene
         SetupBootstrapScene.Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 12) Setup Game Scene — Shield Rush + Polish")]
+    public static void SetupIteration12()
+    {
+        Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -93,7 +99,7 @@ public class SetupGameScene
         SetupDeathSequence();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 11] Game scene setup complete! Game Modes added.");
+        Debug.Log("[Iteration 12] Game scene setup complete! Shield Rush + Polish.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -456,6 +462,18 @@ public class SetupGameScene
         goTitleRect.offsetMin = Vector2.zero;
         goTitleRect.offsetMax = Vector2.zero;
 
+        var modeNameGo = FindOrCreateChild(panelGo, "ModeName");
+        var modeNameTMP = EnsureComponent<TextMeshProUGUI>(modeNameGo);
+        modeNameTMP.text = "CLASSIC";
+        modeNameTMP.fontSize = 24;
+        modeNameTMP.alignment = TextAlignmentOptions.Center;
+        modeNameTMP.color = new Color(0.7f, 0.7f, 0.8f);
+        var modeNameRect = modeNameGo.GetComponent<RectTransform>();
+        modeNameRect.anchorMin = new Vector2(0.1f, 0.75f);
+        modeNameRect.anchorMax = new Vector2(0.9f, 0.82f);
+        modeNameRect.offsetMin = Vector2.zero;
+        modeNameRect.offsetMax = Vector2.zero;
+
         var scoreLabelGo = FindOrCreateChild(panelGo, "ScoreLabel");
         var scoreLabelTMP = EnsureComponent<TextMeshProUGUI>(scoreLabelGo);
         scoreLabelTMP.text = "SCORE";
@@ -561,6 +579,7 @@ public class SetupGameScene
         var popupSO = new SerializedObject(gameOverPopup);
         popupSO.FindProperty("dimBg").objectReferenceValue = dimBgCG;
         popupSO.FindProperty("panel").objectReferenceValue = panelRect;
+        popupSO.FindProperty("modeNameText").objectReferenceValue = modeNameTMP;
         popupSO.FindProperty("scoreValueText").objectReferenceValue = scoreValueTMP;
         popupSO.FindProperty("bestValueText").objectReferenceValue = bestValueTMP;
         popupSO.FindProperty("newBestText").objectReferenceValue = newBestTMP;

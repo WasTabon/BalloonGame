@@ -7,6 +7,7 @@ public class GameOverPopup : MonoBehaviour
 {
     [SerializeField] private CanvasGroup dimBg;
     [SerializeField] private RectTransform panel;
+    [SerializeField] private TextMeshProUGUI modeNameText;
     [SerializeField] private TextMeshProUGUI scoreValueText;
     [SerializeField] private TextMeshProUGUI bestValueText;
     [SerializeField] private TextMeshProUGUI newBestText;
@@ -30,6 +31,12 @@ public class GameOverPopup : MonoBehaviour
     public void Show(int score, int bestScore, bool isNewBest)
     {
         gameObject.SetActive(true);
+
+        if (modeNameText != null)
+        {
+            string modeName = GameModeManager.Instance != null ? GameModeManager.Instance.GetModeName() : "CLASSIC";
+            modeNameText.text = modeName;
+        }
 
         scoreValueText.text = "0";
         bestValueText.text = bestScore.ToString();

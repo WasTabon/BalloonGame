@@ -62,19 +62,21 @@ public class GameplayManager : MonoBehaviour
         if (isGameOver) return;
         isGameOver = true;
 
-        bool isNewBest = GameManager.Instance.TrySetBestScore(CurrentScore);
+        GameMode mode = GameModeManager.Instance != null ? GameModeManager.Instance.CurrentMode : GameMode.Classic;
+        bool isNewBest = GameManager.Instance.TrySetBestScore(CurrentScore, mode);
+        int modeBest = GameManager.Instance.GetBestScore(mode);
         OnGameOver?.Invoke();
 
         if (DeathSequence.Instance != null)
         {
             DeathSequence.Instance.Play(() =>
             {
-                gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
+                gameOverPopup.Show(CurrentScore, modeBest, isNewBest);
             });
         }
         else
         {
-            gameOverPopup.Show(CurrentScore, GameManager.Instance.BestScore, isNewBest);
+            gameOverPopup.Show(CurrentScore, modeBest, isNewBest);
         }
     }
 

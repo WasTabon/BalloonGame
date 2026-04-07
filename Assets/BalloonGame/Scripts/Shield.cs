@@ -5,6 +5,8 @@ public class Shield : MonoBehaviour
 {
     [SerializeField] private float followSpeed = 15f;
     [SerializeField] private float maxMovePerFrame = 0.8f;
+    [SerializeField] private float normalScale = 1.2f;
+    [SerializeField] private float rushScale = 2.2f;
 
     private Rigidbody2D rb;
     private Camera mainCam;
@@ -18,6 +20,13 @@ public class Shield : MonoBehaviour
         mainCam = Camera.main;
         targetPosition = rb.position;
         visuals = GetComponent<ShieldVisuals>();
+    }
+
+    private void Start()
+    {
+        GameMode mode = GameModeManager.Instance != null ? GameModeManager.Instance.CurrentMode : GameMode.Classic;
+        float scale = mode == GameMode.ShieldRush ? rushScale : normalScale;
+        transform.localScale = new Vector3(scale, scale, 1f);
     }
 
     private void Update()

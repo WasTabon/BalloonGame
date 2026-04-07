@@ -7,7 +7,7 @@ public class ShieldVisuals : MonoBehaviour
     private SpriteRenderer sr;
     private Vector3 baseScale;
 
-    private void Awake()
+    private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         baseScale = transform.localScale;
@@ -16,7 +16,8 @@ public class ShieldVisuals : MonoBehaviour
 
     private void SetupTrail()
     {
-        trail = gameObject.AddComponent<TrailRenderer>();
+        trail = gameObject.GetComponent<TrailRenderer>();
+        if (trail == null) trail = gameObject.AddComponent<TrailRenderer>();
         trail.time = 0.15f;
         trail.startWidth = transform.localScale.x * 0.4f;
         trail.endWidth = 0f;
