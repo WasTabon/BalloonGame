@@ -144,6 +144,7 @@ public class SetupMainMenuScene
         StretchFull(settingsBtnTextGo);
 
         var settingsPopup = SetupSettingsPopup(canvasGo);
+        var modeSelectPopup = SetupModeSelectPopup(canvasGo);
 
         var menuSO = new SerializedObject(menuUI);
         menuSO.FindProperty("titleText").objectReferenceValue = titleTMP;
@@ -151,7 +152,148 @@ public class SetupMainMenuScene
         menuSO.FindProperty("playButton").objectReferenceValue = playButton;
         menuSO.FindProperty("settingsButton").objectReferenceValue = settingsBtn;
         menuSO.FindProperty("settingsPopup").objectReferenceValue = settingsPopup;
+        menuSO.FindProperty("modeSelectPopup").objectReferenceValue = modeSelectPopup;
         menuSO.ApplyModifiedProperties();
+    }
+
+    private static ModeSelectPopup SetupModeSelectPopup(GameObject canvasGo)
+    {
+        var popupGo = FindOrCreateChild(canvasGo, "ModeSelectPopup");
+        EnsureRectTransform(popupGo);
+        StretchFull(popupGo);
+        var modePopup = EnsureComponent<ModeSelectPopup>(popupGo);
+
+        var dimBgGo = FindOrCreateChild(popupGo, "DimBg");
+        var dimBgImage = EnsureComponent<Image>(dimBgGo);
+        dimBgImage.color = new Color(0, 0, 0, 0.6f);
+        dimBgImage.raycastTarget = true;
+        StretchFull(dimBgGo);
+        var dimBgCG = EnsureComponent<CanvasGroup>(dimBgGo);
+
+        var panelGo = FindOrCreateChild(popupGo, "Panel");
+        var panelImage = EnsureComponent<Image>(panelGo);
+        panelImage.color = new Color(0.1f, 0.1f, 0.15f);
+        panelImage.raycastTarget = true;
+        var panelRect = panelGo.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.08f, 0.2f);
+        panelRect.anchorMax = new Vector2(0.92f, 0.8f);
+        panelRect.offsetMin = Vector2.zero;
+        panelRect.offsetMax = Vector2.zero;
+
+        var titleGo = FindOrCreateChild(panelGo, "ModeTitle");
+        var titleTMP = EnsureComponent<TextMeshProUGUI>(titleGo);
+        titleTMP.text = "SELECT MODE";
+        titleTMP.fontSize = 48;
+        titleTMP.alignment = TextAlignmentOptions.Center;
+        titleTMP.color = Color.white;
+        titleTMP.fontStyle = FontStyles.Bold;
+        var titleRect = titleGo.GetComponent<RectTransform>();
+        titleRect.anchorMin = new Vector2(0.05f, 0.85f);
+        titleRect.anchorMax = new Vector2(0.95f, 0.97f);
+        titleRect.offsetMin = Vector2.zero;
+        titleRect.offsetMax = Vector2.zero;
+
+        var classicBtn = CreateModeButton(panelGo, "ClassicButton", "CLASSIC",
+            "Survive as long as you can", new Color(0.3f, 0.7f, 0.4f),
+            new Vector2(0.1f, 0.62f), new Vector2(0.9f, 0.82f), out var classicBestTMP);
+
+        var timeAttackBtn = CreateModeButton(panelGo, "TimeAttackButton", "TIME ATTACK",
+            "30 seconds — max score!", new Color(0.9f, 0.5f, 0.2f),
+            new Vector2(0.1f, 0.38f), new Vector2(0.9f, 0.58f), out var timeAttackBestTMP);
+
+        var shieldRushBtn = CreateModeButton(panelGo, "ShieldRushButton", "SHIELD RUSH",
+            "Big shield, tons of chaos!", new Color(0.4f, 0.5f, 0.9f),
+            new Vector2(0.1f, 0.14f), new Vector2(0.9f, 0.34f), out var shieldRushBestTMP);
+
+        var closeBtnGo = FindOrCreateChild(panelGo, "CloseButton");
+        var closeBtnImage = EnsureComponent<Image>(closeBtnGo);
+        closeBtnImage.color = new Color(0.4f, 0.4f, 0.5f);
+        var closeBtn = EnsureComponent<Button>(closeBtnGo);
+        var closeBtnRect = closeBtnGo.GetComponent<RectTransform>();
+        closeBtnRect.anchorMin = new Vector2(0.8f, 0.88f);
+        closeBtnRect.anchorMax = new Vector2(0.95f, 0.97f);
+        closeBtnRect.offsetMin = Vector2.zero;
+        closeBtnRect.offsetMax = Vector2.zero;
+        var closeTextGo = FindOrCreateChild(closeBtnGo, "CloseText");
+        var closeTMP = EnsureComponent<TextMeshProUGUI>(closeTextGo);
+        closeTMP.text = "X";
+        closeTMP.fontSize = 32;
+        closeTMP.alignment = TextAlignmentOptions.Center;
+        closeTMP.color = Color.white;
+        closeTMP.fontStyle = FontStyles.Bold;
+        StretchFull(closeTextGo);
+
+        var popupSO = new SerializedObject(modePopup);
+        popupSO.FindProperty("dimBg").objectReferenceValue = dimBgCG;
+        popupSO.FindProperty("panel").objectReferenceValue = panelRect;
+        popupSO.FindProperty("classicButton").objectReferenceValue = classicBtn;
+        popupSO.FindProperty("timeAttackButton").objectReferenceValue = timeAttackBtn;
+        popupSO.FindProperty("shieldRushButton").objectReferenceValue = shieldRushBtn;
+        popupSO.FindProperty("closeButton").objectReferenceValue = closeBtn;
+        popupSO.FindProperty("classicBestText").objectReferenceValue = classicBestTMP;
+        popupSO.FindProperty("timeAttackBestText").objectReferenceValue = timeAttackBestTMP;
+        popupSO.FindProperty("shieldRushBestText").objectReferenceValue = shieldRushBestTMP;
+        popupSO.ApplyModifiedProperties();
+
+        popupGo.SetActive(false);
+        return modePopup;
+    }
+
+    private static Button CreateModeButton(GameObject parent, string name, string modeName, string desc,
+        Color color, Vector2 anchorMin, Vector2 anchorMax, out TextMeshProUGUI bestText)
+    {
+        var btnGo = FindOrCreateChild(parent, name);
+        var btnImage = EnsureComponent<Image>(btnGo);
+        btnImage.color = color;
+        var btn = EnsureComponent<Button>(btnGo);
+        var btnColors = btn.colors;
+        btnColors.highlightedColor = color * 1.2f;
+        btnColors.pressedColor = color * 0.8f;
+        btn.colors = btnColors;
+        var btnRect = btnGo.GetComponent<RectTransform>();
+        btnRect.anchorMin = anchorMin;
+        btnRect.anchorMax = anchorMax;
+        btnRect.offsetMin = Vector2.zero;
+        btnRect.offsetMax = Vector2.zero;
+
+        var nameGo = FindOrCreateChild(btnGo, "ModeName");
+        var nameTMP = EnsureComponent<TextMeshProUGUI>(nameGo);
+        nameTMP.text = modeName;
+        nameTMP.fontSize = 36;
+        nameTMP.alignment = TextAlignmentOptions.Left;
+        nameTMP.color = Color.white;
+        nameTMP.fontStyle = FontStyles.Bold;
+        var nameRect = nameGo.GetComponent<RectTransform>();
+        nameRect.anchorMin = new Vector2(0.05f, 0.5f);
+        nameRect.anchorMax = new Vector2(0.7f, 0.95f);
+        nameRect.offsetMin = Vector2.zero;
+        nameRect.offsetMax = Vector2.zero;
+
+        var descGo = FindOrCreateChild(btnGo, "ModeDesc");
+        var descTMP = EnsureComponent<TextMeshProUGUI>(descGo);
+        descTMP.text = desc;
+        descTMP.fontSize = 22;
+        descTMP.alignment = TextAlignmentOptions.Left;
+        descTMP.color = new Color(1, 1, 1, 0.7f);
+        var descRect = descGo.GetComponent<RectTransform>();
+        descRect.anchorMin = new Vector2(0.05f, 0.05f);
+        descRect.anchorMax = new Vector2(0.7f, 0.5f);
+        descRect.offsetMin = Vector2.zero;
+        descRect.offsetMax = Vector2.zero;
+
+        var bestGo = FindOrCreateChild(btnGo, "BestText");
+        bestText = EnsureComponent<TextMeshProUGUI>(bestGo);
+        bestText.text = "BEST: 0";
+        bestText.fontSize = 24;
+        bestText.alignment = TextAlignmentOptions.Right;
+        bestText.color = new Color(1, 1, 1, 0.6f);
+        var bestRect = bestGo.GetComponent<RectTransform>();
+        bestRect.anchorMin = new Vector2(0.65f, 0.3f);
+        bestRect.anchorMax = new Vector2(0.95f, 0.7f);
+        bestRect.offsetMin = Vector2.zero;
+        bestRect.offsetMax = Vector2.zero;
+
+        return btn;
     }
 
     private static SettingsPopup SetupSettingsPopup(GameObject canvasGo)

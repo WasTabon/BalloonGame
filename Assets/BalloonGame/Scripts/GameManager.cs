@@ -5,7 +5,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    private const string BEST_SCORE_KEY = "BestScore";
     private const string SOUND_KEY = "SoundEnabled";
 
     public int BestScore { get; private set; }
@@ -24,7 +23,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        BestScore = PlayerPrefs.GetInt(BEST_SCORE_KEY, 0);
+        BestScore = GetBestScore(GameMode.Classic);
         SoundEnabled = PlayerPrefs.GetInt(SOUND_KEY, 1) == 1;
         AudioListener.volume = SoundEnabled ? 1f : 0f;
     }
@@ -43,14 +42,32 @@ public class GameManager : MonoBehaviour
     {
     }
 
+    public int GetBestScore(GameMode mode)
+    {
+        string key = "BestScore_" + mode.ToString();
+        return PlayerPrefs.GetInt(key, 0);
+    }
+
     public bool TrySetBestScore(int score)
     {
-        if (score > BestScore)
+        GameMode mode = GameModeManager.Instance != null ? GameModeManager.Instance.CurrentMode : GameMode.Classic;
+        return TrySetBestScore(score, mode);
+    }
+
+    public bool TrySetBestScore(int score, GameMode mode)
+    {
+        int current = GetBestScore(mode);
+        if (score > current)
         {
-            BestScore = score;
-            PlayerPrefs.SetInt(BEST_SCORE_KEY, BestScore);
+            string key = "BestScore_" + mode.ToString();
+            PlayerPrefs.SetInt(key, score);
             PlayerPrefs.Save();
-            OnBestScoreChanged?.Invoke(BestScore);
+
+            if (mode == GameMode.Classic)
+            {
+                BestScore = score;
+                OnBestScoreChanged?.Invoke(BestScore);
+            }
             return true;
         }
         return false;

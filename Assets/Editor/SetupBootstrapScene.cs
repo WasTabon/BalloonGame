@@ -31,6 +31,7 @@ public class SetupBootstrapScene
         SetupMusicManager();
         SetupSFXManager();
         SetupHapticManager();
+        SetupGameModeManager();
         SetupBootstrapUI();
 
         Debug.Log("[Iteration 1] Bootstrap scene setup complete! Don't forget to create MainMenu and Game scenes and add all 3 scenes to Build Settings.");
@@ -53,6 +54,12 @@ public class SetupBootstrapScene
     {
         var go = FindOrCreate("HapticManager");
         EnsureComponent<HapticManager>(go);
+    }
+
+    private static void SetupGameModeManager()
+    {
+        var go = FindOrCreate("GameModeManager");
+        EnsureComponent<GameModeManager>(go);
     }
 
     private static void SetupAddressableLoader()

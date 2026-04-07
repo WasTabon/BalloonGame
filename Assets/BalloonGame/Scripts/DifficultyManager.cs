@@ -27,12 +27,24 @@ public class DifficultyManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        UpdateDifficulty(0);
+    }
+
+    private void Start()
+    {
+        GameMode mode = GameModeManager.Instance != null ? GameModeManager.Instance.CurrentMode : GameMode.Classic;
+        int startScore = 0;
+        if (mode == GameMode.TimeAttack) startScore = 50;
+        UpdateDifficulty(startScore);
     }
 
     public void UpdateDifficulty(int score)
     {
-        float rawT = Mathf.Clamp01(score / 150f);
+        GameMode mode = GameModeManager.Instance != null ? GameModeManager.Instance.CurrentMode : GameMode.Classic;
+
+        int effectiveScore = score;
+        if (mode == GameMode.TimeAttack) effectiveScore = Mathf.Max(score + 50, score);
+
+        float rawT = Mathf.Clamp01(effectiveScore / 150f);
         float t = rawT * rawT;
 
         BalloonSpeed = Mathf.Lerp(baseBalloonSpeed, maxBalloonSpeed, t);
@@ -40,10 +52,16 @@ public class DifficultyManager : MonoBehaviour
         ObstacleSpeed = Mathf.Lerp(baseObstacleSpeed, maxObstacleSpeed, t);
         ObstacleMass = Mathf.Lerp(baseObstacleMass, maxObstacleMass, t);
 
-        CanSpawnLine = score >= 8;
-        CanSpawnRain = score >= 18;
-        CanSpawnSide = score >= 30;
-        CanSpawnNarrow = score >= 50;
-        CanSpawnTrap = score >= 75;
+        if (mode == GameMode.ShieldRush)
+        {
+            SpawnInterval *= 0.35f;
+            ObstacleMass *= 0.6f;
+        }
+
+        CanSpawnLine = effectiveScore >= 8;
+        CanSpawnRain = effectiveScore >= 18;
+        CanSpawnSide = effectiveScore >= 30;
+        CanSpawnNarrow = effectiveScore >= 50;
+        CanSpawnTrap = effectiveScore >= 75;
     }
 }

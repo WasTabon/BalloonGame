@@ -54,6 +54,18 @@ public class SetupGameScene
         Setup();
     }
 
+    [MenuItem("BalloonGame/(Iteration 11) Setup Game Scene — Game Modes")]
+    public static void SetupIteration11()
+    {
+        Setup();
+    }
+
+    [MenuItem("BalloonGame/(Iteration 11) Setup Bootstrap — Game Modes")]
+    public static void SetupIteration11Bootstrap()
+    {
+        SetupBootstrapScene.Setup();
+    }
+
     public static void Setup()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)
@@ -81,7 +93,7 @@ public class SetupGameScene
         SetupDeathSequence();
         SetupGameCanvas(balloon, shield);
 
-        Debug.Log("[Iteration 10] Game scene setup complete! Final Polish.");
+        Debug.Log("[Iteration 11] Game scene setup complete! Game Modes added.");
         EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
     }
 
@@ -276,8 +288,36 @@ public class SetupGameScene
         tapSO.FindProperty("tapText").objectReferenceValue = tapTMP;
         tapSO.ApplyModifiedProperties();
 
+        var timerGo = FindOrCreateChild(canvasGo, "TimerText");
+        var timerTMP = EnsureComponent<TextMeshProUGUI>(timerGo);
+        timerTMP.text = "30";
+        timerTMP.fontSize = 56;
+        timerTMP.alignment = TextAlignmentOptions.Center;
+        timerTMP.color = new Color(1f, 1f, 1f, 0.9f);
+        timerTMP.fontStyle = FontStyles.Bold;
+        var timerRect = timerGo.GetComponent<RectTransform>();
+        timerRect.anchorMin = new Vector2(0.35f, 0.82f);
+        timerRect.anchorMax = new Vector2(0.65f, 0.88f);
+        timerRect.offsetMin = Vector2.zero;
+        timerRect.offsetMax = Vector2.zero;
+        timerGo.SetActive(false);
+
+        var modeLabelGo = FindOrCreateChild(canvasGo, "ModeLabelText");
+        var modeLabelTMP = EnsureComponent<TextMeshProUGUI>(modeLabelGo);
+        modeLabelTMP.text = "CLASSIC";
+        modeLabelTMP.fontSize = 24;
+        modeLabelTMP.alignment = TextAlignmentOptions.Center;
+        modeLabelTMP.color = new Color(1f, 1f, 1f, 0.4f);
+        var modeLabelRect = modeLabelGo.GetComponent<RectTransform>();
+        modeLabelRect.anchorMin = new Vector2(0.2f, 0.96f);
+        modeLabelRect.anchorMax = new Vector2(0.8f, 0.99f);
+        modeLabelRect.offsetMin = Vector2.zero;
+        modeLabelRect.offsetMax = Vector2.zero;
+
         var uiSO = new SerializedObject(gameUI);
         uiSO.FindProperty("scoreText").objectReferenceValue = scoreTMP;
+        uiSO.FindProperty("timerText").objectReferenceValue = timerTMP;
+        uiSO.FindProperty("modeLabelText").objectReferenceValue = modeLabelTMP;
         uiSO.FindProperty("pauseButton").objectReferenceValue = pauseBtn;
         uiSO.FindProperty("pausePopup").objectReferenceValue = pausePopup;
         uiSO.ApplyModifiedProperties();
